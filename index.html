@@ -338,18 +338,18 @@
       today = new Date().getTime();
 
       let apiUrl =
-        "https://raw.githubusercontent.com/BlogBatDauLapTrinh/crawl_udemy_coupon_real_time/master/udemy_coupon.json";
+        "http://huythanh0x.ddns.net:8080/fetch/all";
 
-      fetch(apiUrl)
+      fetch(apiUrl, { mode: 'cors' })
         .then((response) => {
           return response.json();
         })
         .then((json) => {
-          let courses = json["results"];
+          let courses = json["coupons"];
           container_div.innerHTML = "";
           for (let course of courses) {
             //tạo thẻ Ngày còn lại
-            endTime = Date.parse(course["expired_date"]);
+            endTime = Date.parse(course["expiredDate"]);
             timeLeft = new Date(endTime - today);
 
             let remaining = document.createElement("div");
@@ -376,7 +376,7 @@
             //tạo thẻ category
             let category = document.createElement("div");
             category.classList.add("category");
-            category.textContent = course["Category"];
+            category.textContent = course["category"];
 
             //tạo thẻ review
             let review = document.createElement("div");
@@ -386,11 +386,11 @@
             //tạo thẻ rating
             let rating = document.createElement("div");
             rating.classList.add("rating_div");
-            rating.textContent = course["rating"] + "⭐";
+            rating.textContent = parseFloat(course["rating"]).toFixed(1) + "⭐";
 
             //tạo thẻ Img
             let img = document.createElement("img");
-            img.src = course["preview_img"];
+            img.src = course["previewImage"];
             img.setAttribute("width", "100%");
 
             //tạo khung card
@@ -405,7 +405,7 @@
 
             //tao thẻ link
             let link = document.createElement("a");
-            link.setAttribute("href", course["coupon_link"]);
+            link.setAttribute("href", course["couponUrl"]);
             link.setAttribute("target", "_blank");
 
             //Thêm các thành phần vào card
